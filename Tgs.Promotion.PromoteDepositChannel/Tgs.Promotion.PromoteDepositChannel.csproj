@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PromoteDepositChannel.Core\PromoteDepositChannel.Core.csproj" />
+    <ProjectReference Include="..\PromoteDepositChannel.Repositories\PromoteDepositChannel.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

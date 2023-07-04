@@ -7,4 +7,5 @@ public record DepositEvent(
 	decimal BucketAmount,
 	int VipLevel,
 	Guid DistributePlanId,
+	Guid PromotionId,
 	DateTime CreatedOn);

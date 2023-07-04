@@ -76,6 +76,7 @@ public class DepositEventHandlerTests
 			11000M,
 			1,
 			planId,
+			promotion.PromotionId,
 			DateTime.Now).ToExpectedObject(ctx =>
 			{
 				_ = ctx.IgnoreEqualsOverride();

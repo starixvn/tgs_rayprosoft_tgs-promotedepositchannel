@@ -1,4 +1,5 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
+using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -38,7 +39,19 @@ builder.Services
 	.AddNatsGlobPatternExchange("*");
 
 builder.Services
-	.AddPromoteDepositChannel();
+	.AddPromotionClientServices((promotionOptions, _) => promotionOptions.Url =
+		builder.Configuration.GetValue<Uri>("PromoteDepositChannel:PromotionServiceUrl")!)
+	.AddPaymentServiceClient(httpBuilder => httpBuilder
+		.ConfigureHttpClient(http => http.BaseAddress =
+			builder.Configuration.GetValue<Uri>("PromoteDepositChannel:PaymentServiceUrl")))
+	.AddPlayerServiceClient((playerOptions, _) => playerOptions.BaseUrl =
+		builder.Configuration.GetValue<Uri>("PromoteDepositChannel:PlayerServiceUrl")!)
+	.AddVipLevelServiceClient(httpBuilder => httpBuilder
+		.ConfigureHttpClient(http => http.BaseAddress =
+			builder.Configuration.GetValue<Uri>("PromoteDepositChannel:VipLevelServiceUrl")))
+	.AddPromoteDepositChannel()
+	.AddPromoteDepositChannelRepositories((_, dbBuilder) => dbBuilder
+		.UseNpgsql("name=Tgs"));
 
 builder.Services
 	.AddOpenTelemetry()

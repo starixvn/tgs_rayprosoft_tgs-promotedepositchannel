@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項�
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromoteDepositChannel.Core.UnitTests", "PromoteDepositChannel.Core.UnitTests\PromoteDepositChannel.Core.UnitTests.csproj", "{2186F93A-0FD0-40F0-8983-E3FB3B15CB37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PromoteDepositChannel.Core.UnitTests", "PromoteDepositChannel.Core.UnitTests\PromoteDepositChannel.Core.UnitTests.csproj", "{2186F93A-0FD0-40F0-8983-E3FB3B15CB37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromoteDepositChannel.Repositories", "PromoteDepositChannel.Repositories\PromoteDepositChannel.Repositories.csproj", "{0DC95013-CD30-4D88-97E4-E9FA7156BD01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2186F93A-0FD0-40F0-8983-E3FB3B15CB37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2186F93A-0FD0-40F0-8983-E3FB3B15CB37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2186F93A-0FD0-40F0-8983-E3FB3B15CB37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC95013-CD30-4D88-97E4-E9FA7156BD01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC95013-CD30-4D88-97E4-E9FA7156BD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC95013-CD30-4D88-97E4-E9FA7156BD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC95013-CD30-4D88-97E4-E9FA7156BD01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -66,6 +66,7 @@ internal class DepositEventHandler
 			bucketAmount,
 			playerInfo.VipLevel,
 			distributePlanId,
+			_promotion.PromotionId,
 			DateTime.Now);
 
 		await _tgsRepository.SaveDepositEventAsync(
