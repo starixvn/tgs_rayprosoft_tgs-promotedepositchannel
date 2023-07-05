@@ -44,6 +44,7 @@ public class BrandPromotionManagerTests
 			.AddSingleton(Substitute.For<ITgsRepository>())
 			.AddSingleton(Substitute.For<ISerialNumberGenerator>())
 			.AddSingleton<ILogger<BrandDepositEventHandler>>(NullLogger<BrandDepositEventHandler>.Instance)
+			.AddSingleton(Substitute.For<IStatisticsService>())
 			.BuildServiceProvider();
 
 		var sut = new BrandPromotionManager(

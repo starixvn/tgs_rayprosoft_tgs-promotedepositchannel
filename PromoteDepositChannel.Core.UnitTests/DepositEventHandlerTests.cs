@@ -17,6 +17,7 @@ public class DepositEventHandlerTests
 		var fakePlayerService = Substitute.For<IPlayerService>();
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+		var fakeStatisticsService = Substitute.For<IStatisticsService>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -40,7 +41,8 @@ public class DepositEventHandlerTests
 			promotion,
 			fakePlayerService,
 			fakeTgsRepository,
-			fakeSerialNumberGenerator);
+			fakeSerialNumberGenerator,
+			fakeStatisticsService);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -88,6 +90,8 @@ public class DepositEventHandlerTests
 		await sut.OnDepositedAsync(depositForm);
 
 		// Assert
+		_ = fakeStatisticsService.Received(1)
+			.IncrementPromotionUsedAmountAsync(Arg.Is(promotion.PromotionId), Arg.Is(100M));
 		_ = fakeTgsRepository.Received(1)
 			.SaveDepositEventAsync(Arg.Is<DepositEvent>(data => expectedDepositEvent.Matches(data)));
 		_ = fakePromotionServiceClient.Received(1)
@@ -108,6 +112,7 @@ public class DepositEventHandlerTests
 		var fakePlayerService = Substitute.For<IPlayerService>();
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+		var fakeStatisticsService = Substitute.For<IStatisticsService>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -131,7 +136,8 @@ public class DepositEventHandlerTests
 			promotion,
 			fakePlayerService,
 			fakeTgsRepository,
-			fakeSerialNumberGenerator);
+			fakeSerialNumberGenerator,
+			fakeStatisticsService);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -146,6 +152,8 @@ public class DepositEventHandlerTests
 		await sut.OnDepositedAsync(depositForm);
 
 		// Assert
+		_ = fakeStatisticsService.Received(0)
+			.IncrementPromotionUsedAmountAsync(Arg.Any<Guid>(), Arg.Any<decimal>());
 		_ = fakeTgsRepository.Received(0)
 			.SaveDepositEventAsync(Arg.Any<DepositEvent>());
 		_ = fakePromotionServiceClient.Received(0)
@@ -166,6 +174,7 @@ public class DepositEventHandlerTests
 		var fakePlayerService = Substitute.For<IPlayerService>();
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
+		var fakeStatisticsService = Substitute.For<IStatisticsService>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -189,7 +198,8 @@ public class DepositEventHandlerTests
 			promotion,
 			fakePlayerService,
 			fakeTgsRepository,
-			fakeSerialNumberGenerator);
+			fakeSerialNumberGenerator,
+			fakeStatisticsService);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -207,6 +217,8 @@ public class DepositEventHandlerTests
 		await sut.OnDepositedAsync(depositForm);
 
 		// Assert
+		_ = fakeStatisticsService.Received(0)
+			.IncrementPromotionUsedAmountAsync(Arg.Any<Guid>(), Arg.Any<decimal>());
 		_ = fakeTgsRepository.Received(0)
 			.SaveDepositEventAsync(Arg.Any<DepositEvent>());
 		_ = fakePromotionServiceClient.Received(0)

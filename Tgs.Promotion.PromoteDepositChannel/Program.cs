@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.Promotion.PromoteDepositChannel;
 using Tgs.Promotion.PromoteDepositChannel.MessageQueue;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,9 @@ builder.Services
 	.AddNatsGlobPatternExchange("*");
 
 builder.Services
+	.AddSingleton(sp => ActivatorUtilities.CreateInstance<RedisConnectionManager>(
+		sp,
+		builder.Configuration.GetConnectionString("Redis")!))
 	.AddPromotionClientServices((promotionOptions, _) => promotionOptions.Url =
 		builder.Configuration.GetValue<Uri>("PromoteDepositChannel:PromotionServiceUrl")!)
 	.AddPaymentServiceClient(httpBuilder => httpBuilder
@@ -50,8 +54,10 @@ builder.Services
 		.ConfigureHttpClient(http => http.BaseAddress =
 			builder.Configuration.GetValue<Uri>("PromoteDepositChannel:VipLevelServiceUrl")))
 	.AddPromoteDepositChannel()
-	.AddPromoteDepositChannelRepositories((_, dbBuilder) => dbBuilder
-		.UseNpgsql("name=Tgs"));
+	.AddPromoteDepositChannelRepositories(
+		(_, dbBuilder) => dbBuilder
+			.UseNpgsql("name=Tgs"),
+		sp => sp.GetRequiredService<RedisConnectionManager>().Database);
 
 builder.Services
 	.AddOpenTelemetry()

@@ -13,6 +13,7 @@ internal class DepositEventHandler
 	private readonly IPlayerService _playerService;
 	private readonly ITgsRepository _tgsRepository;
 	private readonly ISerialNumberGenerator _serialNumberGenerator;
+	private readonly IStatisticsService _statisticsService;
 
 	public EventRange EventRange => _promotion.EventRange;
 
@@ -23,13 +24,15 @@ internal class DepositEventHandler
 		Promotion promotion,
 		IPlayerService playerService,
 		ITgsRepository tgsRepository,
-		ISerialNumberGenerator serialNumberGenerator)
+		ISerialNumberGenerator serialNumberGenerator,
+		IStatisticsService statisticsService)
 	{
 		BrandId = brandId;
 		_promotion = promotion;
 		_playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
 		_tgsRepository = tgsRepository ?? throw new ArgumentNullException(nameof(tgsRepository));
 		_serialNumberGenerator = serialNumberGenerator ?? throw new ArgumentNullException(nameof(serialNumberGenerator));
+		_statisticsService = statisticsService ?? throw new ArgumentNullException(nameof(statisticsService));
 	}
 
 	public async ValueTask OnDepositedAsync(DepositFormInfo formInfo, CancellationToken cancellationToken = default)
@@ -68,6 +71,11 @@ internal class DepositEventHandler
 			distributePlanId,
 			_promotion.PromotionId,
 			DateTime.Now);
+
+		await _statisticsService.IncrementPromotionUsedAmountAsync(
+			_promotion.PromotionId,
+			bonus,
+			cancellationToken).ConfigureAwait(false);
 
 		await _tgsRepository.SaveDepositEventAsync(
 			depositEvent,
