@@ -20,7 +20,7 @@ internal class BrandDepositEventHandler
 		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 	}
 
-	public virtual async ValueTask OnDepositedAsync(
+	public async ValueTask OnDepositedAsync(
 		DepositFormInfo depositForm,
 		CancellationToken cancellationToken = default)
 	{
@@ -36,5 +36,12 @@ internal class BrandDepositEventHandler
 			{
 				_logger.LogError(ex, "Brand({brandId}) Handle event occur error.", BrandId);
 			}
+	}
+
+	public async ValueTask InitPromotionsUsedAmountAsync(CancellationToken cancellationToken = default)
+	{
+		foreach (var handler in _eventHandlers)
+			await handler.InitPromotionUsedAmountAsync(
+				cancellationToken).ConfigureAwait(false);
 	}
 }

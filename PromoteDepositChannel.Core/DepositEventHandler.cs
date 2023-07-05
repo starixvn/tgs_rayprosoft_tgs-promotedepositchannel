@@ -89,4 +89,24 @@ internal class DepositEventHandler
 			depositEvent.Id,
 			cancellationToken).ConfigureAwait(false);
 	}
+
+	public async ValueTask InitPromotionUsedAmountAsync(CancellationToken cancellationToken = default)
+	{
+		var usedAmount = await _statisticsService.GetPromotionUsedAmountAsync(
+			_promotion.PromotionId,
+			cancellationToken).ConfigureAwait(false);
+
+		if (usedAmount is null)
+		{
+			var (amount, _) = await _tgsRepository.GetPromotionUsedAmountAsync(
+				_promotion.PromotionId,
+				cancellationToken).ConfigureAwait(false);
+
+			await _statisticsService.InitPromotionUsedAmountAsync(
+				_promotion.PromotionId,
+				amount,
+				EventRange.End.AddDays(1D),
+				cancellationToken).ConfigureAwait(false);
+		}
+	}
 }

@@ -37,12 +37,27 @@ internal class RedisStatisticsService : IStatisticsService
 			(double)amount).ConfigureAwait(false);
 	}
 
-	public async ValueTask<decimal> GetPromotionUsedAmountAsync(Guid promotionId, CancellationToken cancellationToken = default)
+	public async ValueTask<decimal?> GetPromotionUsedAmountAsync(Guid promotionId, CancellationToken cancellationToken = default)
 	{
 		var key = _KeyPrefix.Append($":UsedAmount:{promotionId}");
 
 		var amount = await _redisDatabase.StringGetAsync(key).ConfigureAwait(false);
 
-		return (decimal)(double)amount;
+		return amount.HasValue ? (decimal)(double)amount : null;
+	}
+
+	public async ValueTask InitPromotionUsedAmountAsync(
+		Guid promotionId,
+		decimal amount,
+		DateTime expireTime,
+		CancellationToken cancellationToken = default)
+	{
+		var key = _KeyPrefix.Append($":UsedAmount:{promotionId}");
+
+		await _redisDatabase.StringSetAsync(
+			key,
+			(double)amount,
+			expiry: expireTime - DateTime.Now,
+			when: When.NotExists).ConfigureAwait(false);
 	}
 }

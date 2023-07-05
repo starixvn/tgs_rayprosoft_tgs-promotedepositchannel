@@ -1,4 +1,5 @@
-﻿using Tgs.Promotion.PromoteDepositChannel.Repositories.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Tgs.Promotion.PromoteDepositChannel.Repositories.Entities;
 
 namespace Tgs.Promotion.PromoteDepositChannel.Repositories;
 
@@ -28,5 +29,41 @@ internal class TgsRepository : ITgsRepository
 
 		_ = await _dbContext.SaveChangesAsync(
 			   cancellationToken).ConfigureAwait(false);
+	}
+
+	public async ValueTask<(decimal Amount, Guid? SnapshotId)> GetPromotionUsedAmountAsync(
+		Guid promotionId,
+		CancellationToken cancellationToken = default)
+	{
+		var rows = await _dbContext.PromotionPromoteDepositChannels
+			.Where(p => p.PromotionId == promotionId)
+			.ToArrayAsync(cancellationToken)
+			.ConfigureAwait(false);
+
+		var aggregate = rows.OrderBy(row => row.Id)
+			.Aggregate(
+				new UsedAmountAccmulate
+				{
+					Amount = 0M,
+					SnapshotId = default
+				},
+				(accmulate, row) =>
+				{
+					accmulate.Amount += row.Bonus;
+					accmulate.SnapshotId = row.Id;
+
+					return accmulate;
+				});
+
+		return aggregate is not null
+			? (aggregate.Amount, aggregate.SnapshotId)
+			: (0M, null);
+	}
+
+	private class UsedAmountAccmulate
+	{
+		public decimal Amount { get; set; }
+
+		public Guid? SnapshotId { get; set; }
 	}
 }

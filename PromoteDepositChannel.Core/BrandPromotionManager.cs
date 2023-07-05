@@ -41,6 +41,10 @@ internal class BrandPromotionManager
 		var dict = await CreateAllBrandActivatedPromotionsAsync(
 			 cancellationToken).ConfigureAwait(false);
 
+		foreach (var brandHandler in dict.Values)
+			await brandHandler.InitPromotionsUsedAmountAsync(
+				  cancellationToken).ConfigureAwait(false);
+
 		_brandDepositHandlerObservable.OnNext(dict);
 	}
 

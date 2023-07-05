@@ -6,5 +6,7 @@ public interface IStatisticsService
 
 	ValueTask DecrementPromotionUsedAmountAsync(Guid promotionId, decimal amount, CancellationToken cancellationToken = default);
 
-	ValueTask<decimal> GetPromotionUsedAmountAsync(Guid promotionId, CancellationToken cancellationToken = default);
+	ValueTask<decimal?> GetPromotionUsedAmountAsync(Guid promotionId, CancellationToken cancellationToken = default);
+
+	ValueTask InitPromotionUsedAmountAsync(Guid promotionId, decimal amount, DateTime expireTime, CancellationToken cancellationToken = default);
 }
