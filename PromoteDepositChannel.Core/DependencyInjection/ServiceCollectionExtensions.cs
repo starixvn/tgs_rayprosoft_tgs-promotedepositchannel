@@ -9,5 +9,6 @@ public static class ServiceCollectionExtensions
 			.AddTransient<IPlayerService, PlayerService>()
 			.AddSingleton<EventBus>()
 			.AddSingleton<IEventSender>(sp => sp.GetRequiredService<EventBus>())
-			.AddSingleton<BrandPromotionManager>();
+			.AddSingleton<BrandPromotionManager>()
+			.AddHostedService<PromotionBackground>();
 }
