@@ -51,8 +51,8 @@ internal class BrandPromotionManager
 	private ValueTask<Dictionary<Guid, BrandDepositEventHandler>> CreateAllBrandActivatedPromotionsAsync(CancellationToken cancellationToken = default)
 		=> _promotionServiceClient.ListPromotionsByPromotionTypeAsync(_PromotionType, cancellationToken)
 			.Where(info => new EventRange(
-				info.EventDuring.From.AddHours(-1D),
-				info.EventDuring.To.AddHours(1D)).InTheRange(DateTime.UtcNow))
+				info.EventDuring.From.ToUniversalTime().AddHours(-1D),
+				info.EventDuring.To.ToUniversalTime().AddHours(1D)).InTheRange(DateTime.UtcNow))
 			.Select(info => _promotionServiceClient
 				.GetPromotionRuleAsync<PromotionRule>(info.Id, cancellationToken)
 				.AsTask()

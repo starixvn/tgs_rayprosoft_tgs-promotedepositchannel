@@ -6,6 +6,7 @@ using Tgs.Payment.Clients;
 using Tgs.Promotion.Clients;
 using Tgs.Promotion.PromoteDepositChannel;
 using Tgs.SerialNumberGenerator;
+using Xunit;
 
 namespace PromoteDepositChannel.Core.UnitTests;
 
@@ -30,6 +31,52 @@ public class BrandPromotionManagerTests
 		// Assert
 		_ = fakePromotionServiceClient.Received(1)
 			.ListPromotionsByPromotionTypeAsync(Arg.Any<string>());
+	}
+
+	[Fact]
+	public async Task 更新所有Brand的活動列表時_會從資料庫初始化UsedAmount()
+	{
+		// Arrange
+		var fakePromotionServiceClient = Substitute.For<IPromotionServiceClient>();
+		var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
+		var fakeStatisticsService = Substitute.For<IStatisticsService>();
+		var fakeServiceProvider = new ServiceCollection()
+			.AddSingleton(fakeStatisticsService)
+			.AddSingleton<ILogger<BrandDepositEventHandler>>(NullLogger<BrandDepositEventHandler>.Instance)
+			.AddSingleton(Substitute.For<IPlayerService>())
+			.AddSingleton(Substitute.For<ITgsRepository>())
+			.AddSingleton(Substitute.For<ISerialNumberGenerator>())
+			.BuildServiceProvider();
+
+		var sut = new BrandPromotionManager(
+			fakePromotionServiceClient,
+			fakePaymentServiceClient,
+			fakeServiceProvider);
+
+		_ = fakePromotionServiceClient.ListPromotionsByPromotionTypeAsync(Arg.Any<string>())
+			.Returns(new[]{
+				new PromotionMainInfo
+				{
+					Id = Guid.NewGuid(),
+					EventDuring = (DateTime.Now, DateTime.Now.AddDays(1D))
+				}
+			}.ToAsyncEnumerable());
+
+		_ = fakePromotionServiceClient.GetPromotionRuleAsync<BrandPromotionManager.PromotionRule>(Arg.Any<Guid>())
+			.Returns(new BrandPromotionManager.PromotionRule(
+				new PromoteDepositChannelSettings(
+					Array.Empty<int>(),
+					Array.Empty<Guid>(),
+					0M,
+					0M,
+					0M)));
+
+		// Act
+		await sut.RenewAllBrandActivatedPromotionsAsync();
+
+		// Assert
+		_ = fakeStatisticsService.Received(1)
+			.InitPromotionUsedAmountAsync(Arg.Any<Guid>(), Arg.Any<decimal>(), Arg.Any<DateTime>());
 	}
 
 	[Fact]
