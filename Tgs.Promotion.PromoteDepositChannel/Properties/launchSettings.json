@@ -1,36 +1,36 @@
 ﻿{
-	"iisSettings": {
-		"windowsAuthentication": false,
-		"anonymousAuthentication": true,
-		"iisExpress": {
-			"applicationUrl": "http://localhost:15331",
-			"sslPort": 44364
-		}
-	},
 	"profiles": {
 		"http": {
 			"commandName": "Project",
-			"dotnetRunMessages": true,
 			"launchBrowser": true,
-			"applicationUrl": "http://localhost:5288",
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
-			}
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"OTEL_SERVICE_NAME": "Promote-Deposit-Channel(local)",
+				"NODE_IP": "otel.rpgp.cc"
+			},
+			"dotnetRunMessages": true,
+			"applicationUrl": "http://localhost:5288"
 		},
 		"https": {
 			"commandName": "Project",
+			"launchBrowser": true,
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development",
+				"OTEL_SERVICE_NAME": "Promote-Deposit-Channel(local)",
+				"NODE_IP": "otel.rpgp.cc"
+			},
 			"dotnetRunMessages": true,
-			"launchBrowser": true,
-			"applicationUrl": "https://localhost:7127;http://localhost:5288",
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
-			}
+			"applicationUrl": "https://localhost:7127;http://localhost:5288"
 		},
-		"IIS Express": {
-			"commandName": "IISExpress",
+		"Docker": {
+			"commandName": "Docker",
 			"launchBrowser": true,
+			"launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+			"publishAllPorts": true,
+			"useSSL": true,
 			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
+				"OTEL_SERVICE_NAME": "Promote-Deposit-Channel(local)",
+				"NODE_IP": "otel.rpgp.cc"
 			}
 		}
 	}
