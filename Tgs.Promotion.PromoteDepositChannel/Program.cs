@@ -36,7 +36,11 @@ builder.Services
 		.AddHandler(
 			ProcessorTypes.DepositFormStatusChangedHandlerType,
 			"tgs.payment.deposit.status_ex",
-			"tgs.promotion.promote-deposit-channel"))
+			"tgs.promotion.promote-deposit-channel")
+		.AddProcessor(
+			ProcessorTypes.PromoteDepositChannelSettingProcessorType,
+			"tgs.promotion.promotedepositchannel.setting",
+			"tgs.promotion.promotedepositchannel.setting"))
 	.AddNatsGlobPatternExchange("*");
 
 builder.Services
