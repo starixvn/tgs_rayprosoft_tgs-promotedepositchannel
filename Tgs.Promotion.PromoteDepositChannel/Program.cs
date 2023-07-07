@@ -57,6 +57,7 @@ builder.Services
 	.AddVipLevelServiceClient(httpBuilder => httpBuilder
 		.ConfigureHttpClient(http => http.BaseAddress =
 			builder.Configuration.GetValue<Uri>("PromoteDepositChannel:VipLevelServiceUrl")))
+	.AddSerialNumberGenerator()
 	.AddPromoteDepositChannel()
 	.AddPromoteDepositChannelRepositories(
 		(_, dbBuilder) => dbBuilder
