@@ -57,7 +57,11 @@ internal class EventBus : IEventSender
 						if (evt.ParentTraceId is not null && evt.ParentSpanId is not null)
 							activity?.SetParentId(evt.ParentTraceId.Value, evt.ParentSpanId.Value);
 
-						_logger.LogDebug("Handle FormEvent: {event}, {activityName}", evt, activity?.DisplayName);
+						_logger.LogDebug(
+							"Handle FormEvent: {event}, {activityName}, {activitySourceName}",
+							evt,
+							activity?.DisplayName,
+							_ActivitySource.Name);
 
 						using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
