@@ -113,7 +113,7 @@ internal class EventBus : IEventSender
 						}))
 						.Catch((Exception ex) =>
 						{
-							_logger.LogError(ex, "Process UsedAmount {id} occur error!", id);
+							_logger.LogError(ex, "Process UsedAmount {id} occur error!", id.Id);
 
 							return Observable.Empty<Unit>();
 						}))

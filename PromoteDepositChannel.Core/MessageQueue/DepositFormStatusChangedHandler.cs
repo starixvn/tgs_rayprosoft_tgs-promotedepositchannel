@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using Tgs.MessageQueue;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
@@ -9,11 +10,16 @@ internal class DepositFormStatusChangedHandler : IMessageHandler
 {
 	private readonly IPaymentServiceClient _paymentServiceClient;
 	private readonly IEventSender _eventSender;
+	private readonly ILogger<DepositFormStatusChangedHandler> _logger;
 
-	public DepositFormStatusChangedHandler(IPaymentServiceClient paymentServiceClient, IEventSender eventSender)
+	public DepositFormStatusChangedHandler(
+		IPaymentServiceClient paymentServiceClient,
+		IEventSender eventSender,
+		ILogger<DepositFormStatusChangedHandler> logger)
 	{
 		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
 		_eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
+		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 	}
 
 	public async ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
@@ -26,7 +32,12 @@ internal class DepositFormStatusChangedHandler : IMessageHandler
 			cancellationToken).ConfigureAwait(false);
 
 		if (depositForm is null)
+		{
+			_logger.LogDebug("Can't find deposit form {id} info.", formEvent.FormId.ToGuid());
 			return;
+		}
+
+		_logger.LogDebug("DepositForm({changedStatus}, {status})", changedStatus, depositForm.Status);
 
 		if (changedStatus != depositForm.Status
 			&& depositForm.Status == PaymentFlowState.Approved)
