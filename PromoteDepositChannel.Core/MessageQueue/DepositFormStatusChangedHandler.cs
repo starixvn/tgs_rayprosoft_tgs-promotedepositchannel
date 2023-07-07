@@ -1,4 +1,5 @@
-﻿using Tgs.MessageQueue;
+﻿using System.Diagnostics;
+using Tgs.MessageQueue;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
 
@@ -31,7 +32,9 @@ internal class DepositFormStatusChangedHandler : IMessageHandler
 			&& depositForm.Status == PaymentFlowState.Approved)
 			await _eventSender.PushEventAsync(
 				new FormEvent(
-					depositForm),
+					depositForm,
+					 Activity.Current?.TraceId,
+					 Activity.Current?.SpanId),
 				cancellationToken).ConfigureAwait(false);
 	}
 }
