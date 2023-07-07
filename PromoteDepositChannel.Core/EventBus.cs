@@ -1,4 +1,5 @@
-﻿using System.Reactive;
+﻿using System.Diagnostics;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
@@ -12,6 +13,8 @@ namespace Tgs.Promotion.PromoteDepositChannel;
 
 internal class EventBus : IEventSender
 {
+	private static readonly ActivitySource _ActivitySource = new($"{typeof(EventBus).Namespace}.{nameof(EventBus)}");
+
 	private readonly IServiceProvider _serviceProvider;
 	private readonly ILogger<EventBus> _logger;
 
@@ -20,7 +23,7 @@ internal class EventBus : IEventSender
 		SingleReader = true
 	});
 
-	private readonly Subject<Guid> _usedAmountSubject = new();
+	private readonly Subject<(Guid Id, string? ParentActivityId)> _usedAmountSubject = new();
 
 	public EventBus(IServiceProvider serviceProvider, ILogger<EventBus> logger)
 	{
@@ -33,7 +36,7 @@ internal class EventBus : IEventSender
 
 	public ValueTask TriggerUpdateUsedAmountAsync(Guid promotionId)
 	{
-		_usedAmountSubject.OnNext(promotionId);
+		_usedAmountSubject.OnNext((promotionId, Activity.Current?.Id));
 		return ValueTask.CompletedTask;
 	}
 
@@ -45,22 +48,26 @@ internal class EventBus : IEventSender
 			.ConfigureAwait(false))
 		{
 			if (reader.TryRead(out var evt))
-				try
-				{
-					using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+				using (var activity = _ActivitySource.StartActivity($"{nameof(EventBus)}.{nameof(HandleEventLoopAsync)}"))
+					try
+					{
+						if (evt.ParentTraceId is not null && evt.ParentSpanId is not null)
+							activity?.SetParentId(evt.ParentTraceId.Value, evt.ParentSpanId.Value);
 
-					await using var scope = _serviceProvider.CreateAsyncScope();
+						using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-					var promotionManager = scope.ServiceProvider.GetRequiredService<BrandPromotionManager>();
+						await using var scope = _serviceProvider.CreateAsyncScope();
 
-					await promotionManager.ProcessDepositEventAsync(
-						evt.FormInfo,
-						cancellationToken).ConfigureAwait(false);
-				}
-				catch (Exception ex)
-				{
-					_logger.LogError(ex, "Process command occur errors.");
-				}
+						var promotionManager = scope.ServiceProvider.GetRequiredService<BrandPromotionManager>();
+
+						await promotionManager.ProcessDepositEventAsync(
+							evt.FormInfo,
+							cancellationToken).ConfigureAwait(false);
+					}
+					catch (Exception ex)
+					{
+						_logger.LogError(ex, "Process command occur errors.");
+					}
 		}
 	}
 
@@ -86,16 +93,20 @@ internal class EventBus : IEventSender
 						{
 							await default(CreateThreadAwaiter);
 
+							using var activity = _ActivitySource.StartActivity($"Handle Promotion UsedAmount");
+							if (!string.IsNullOrEmpty(id.ParentActivityId))
+								activity?.SetParentId(id.ParentActivityId);
+
 							await using var scope = _serviceProvider.CreateAsyncScope();
 							var tgsRepository = scope.ServiceProvider.GetRequiredService<ITgsRepository>();
 							var promotionServiceClient = scope.ServiceProvider.GetRequiredService<IPromotionServiceClient>();
 
 							var (amount, snapshotId) = await tgsRepository.GetPromotionUsedAmountAsync(
-								id,
+								id.Id,
 								cancellationToken).ConfigureAwait(false);
 
 							await promotionServiceClient.UpdatePromotionUsedAmountAsync(
-								id,
+								id.Id,
 								amount,
 								snapshotId,
 								cancellationToken).ConfigureAwait(false);
