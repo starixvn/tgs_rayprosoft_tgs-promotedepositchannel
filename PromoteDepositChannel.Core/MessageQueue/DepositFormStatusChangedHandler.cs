@@ -37,7 +37,7 @@ internal class DepositFormStatusChangedHandler : IMessageHandler
 			return;
 		}
 
-		_logger.LogDebug("DepositForm({changedStatus}, {status})", changedStatus, depositForm.Status);
+		_logger.LogDebug("DepositForm({changedStatus}, {status}, {activityId})", changedStatus, depositForm.Status, Activity.Current?.Id);
 
 		if (changedStatus != depositForm.Status
 			&& depositForm.Status == PaymentFlowState.Approved)
