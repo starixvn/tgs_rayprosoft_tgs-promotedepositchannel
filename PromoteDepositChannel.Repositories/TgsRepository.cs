@@ -24,7 +24,7 @@ internal class TgsRepository : ITgsRepository
 			VipLevel = depositEvent.VipLevel,
 			PromotionId = depositEvent.PromotionId,
 			DistributePlanId = depositEvent.DistributePlanId,
-			CreatedOn = depositEvent.CreatedOn,
+			CreatedOn = depositEvent.CreatedOn.ToUniversalTime(),
 		}, cancellationToken).ConfigureAwait(false);
 
 		_ = await _dbContext.SaveChangesAsync(
