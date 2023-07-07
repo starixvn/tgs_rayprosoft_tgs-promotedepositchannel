@@ -54,6 +54,8 @@ internal class EventBus : IEventSender
 				using (var activity = _ActivitySource.StartActivity($"{nameof(EventBus)}.{nameof(HandleEventLoopAsync)}"))
 					try
 					{
+						_logger.LogDebug("Handle FormEvent: {event}", evt);
+
 						if (evt.ParentTraceId is not null && evt.ParentSpanId is not null)
 							activity?.SetParentId(evt.ParentTraceId.Value, evt.ParentSpanId.Value);
 
