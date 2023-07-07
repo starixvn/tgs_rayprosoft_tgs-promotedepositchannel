@@ -77,6 +77,10 @@ internal class EventBus : IEventSender
 					{
 						_logger.LogError(ex, "Process command occur errors.");
 					}
+					finally
+					{
+						activity?.Stop();
+					}
 		}
 	}
 
