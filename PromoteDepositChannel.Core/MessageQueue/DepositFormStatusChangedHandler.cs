@@ -44,8 +44,7 @@ internal class DepositFormStatusChangedHandler : IMessageHandler
 			await _eventSender.PushEventAsync(
 				new FormEvent(
 					depositForm,
-					 Activity.Current?.TraceId,
-					 Activity.Current?.SpanId),
+					Activity.Current?.Id),
 				cancellationToken).ConfigureAwait(false);
 	}
 }
