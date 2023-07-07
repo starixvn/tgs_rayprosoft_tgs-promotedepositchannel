@@ -32,7 +32,10 @@ internal class EventBus : IEventSender
 	}
 
 	public ValueTask PushEventAsync(FormEvent formEvent, CancellationToken cancellationToken = default)
-		=> _channel.Writer.WriteAsync(formEvent, cancellationToken);
+	{
+		_logger.LogDebug("Push FormEvent: {event}", formEvent);
+		return _channel.Writer.WriteAsync(formEvent, cancellationToken);
+	}
 
 	public ValueTask TriggerUpdateUsedAmountAsync(Guid promotionId)
 	{
