@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using Tgs.Payment.Clients;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
 internal class BrandDepositEventHandler
 {
+	private static readonly ActivitySource _ActivitySource = new($"{typeof(BrandDepositEventHandler).Namespace}.{nameof(BrandDepositEventHandler)}");
+
 	private readonly IEnumerable<DepositEventHandler> _eventHandlers;
 	private readonly ILogger<BrandDepositEventHandler> _logger;
 
@@ -24,6 +27,8 @@ internal class BrandDepositEventHandler
 		DepositFormInfo depositForm,
 		CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(BrandDepositEventHandler)}.{nameof(OnDepositedAsync)}");
+
 		foreach (var handler in _eventHandlers)
 			try
 			{
@@ -40,6 +45,8 @@ internal class BrandDepositEventHandler
 
 	public async ValueTask InitPromotionsUsedAmountAsync(CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(BrandDepositEventHandler)}.{nameof(InitPromotionsUsedAmountAsync)}");
+
 		foreach (var handler in _eventHandlers)
 			await handler.InitPromotionUsedAmountAsync(
 				cancellationToken).ConfigureAwait(false);

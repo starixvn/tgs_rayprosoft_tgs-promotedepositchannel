@@ -1,6 +1,8 @@
-﻿using System.Reactive.Linq;
+﻿using System.Diagnostics;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Tgs.Payment.Clients;
 using Tgs.Promotion.Clients;
 
@@ -8,24 +10,30 @@ namespace Tgs.Promotion.PromoteDepositChannel;
 
 internal class BrandPromotionManager
 {
+	private static readonly ActivitySource _ActivitySource = new($"{typeof(BrandPromotionManager).Namespace}.{nameof(BrandPromotionManager)}");
 	private static readonly string _PromotionType = "PromoteDepositChannel";
 	private readonly IPromotionServiceClient _promotionServiceClient;
 	private readonly IPaymentServiceClient _paymentServiceClient;
 	private readonly IServiceProvider _serviceProvider;
+	private readonly ILogger<BrandPromotionManager> _logger;
 	private readonly ReplaySubject<Dictionary<Guid, BrandDepositEventHandler>> _brandDepositHandlerObservable = new(1);
 
 	public BrandPromotionManager(
 		IPromotionServiceClient promotionServiceClient,
 		IPaymentServiceClient paymentServiceClient,
-		IServiceProvider serviceProvider)
+		IServiceProvider serviceProvider,
+		ILogger<BrandPromotionManager> logger)
 	{
 		_promotionServiceClient = promotionServiceClient ?? throw new ArgumentNullException(nameof(promotionServiceClient));
 		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
 		_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 	}
 
 	public async Task ProcessDepositEventAsync(DepositFormInfo formInfo, CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(BrandPromotionManager)}.{nameof(ProcessDepositEventAsync)}");
+
 		var handlers = await _brandDepositHandlerObservable.ToAsyncEnumerable()
 			.FirstAsync(cancellationToken)
 			.ConfigureAwait(false);
@@ -38,6 +46,8 @@ internal class BrandPromotionManager
 
 	public async Task RenewAllBrandActivatedPromotionsAsync(CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(BrandPromotionManager)}.{nameof(RenewAllBrandActivatedPromotionsAsync)}");
+
 		var dict = await CreateAllBrandActivatedPromotionsAsync(
 			 cancellationToken).ConfigureAwait(false);
 

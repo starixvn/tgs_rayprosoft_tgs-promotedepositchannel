@@ -23,7 +23,8 @@ public class BrandPromotionManagerTests
 		var sut = new BrandPromotionManager(
 			fakePromotionServiceClient,
 			fakePaymentServiceClient,
-			fakeServiceProvider);
+			fakeServiceProvider,
+			NullLogger<BrandPromotionManager>.Instance);
 
 		// Act
 		await sut.RenewAllBrandActivatedPromotionsAsync();
@@ -51,7 +52,8 @@ public class BrandPromotionManagerTests
 		var sut = new BrandPromotionManager(
 			fakePromotionServiceClient,
 			fakePaymentServiceClient,
-			fakeServiceProvider);
+			fakeServiceProvider,
+			NullLogger<BrandPromotionManager>.Instance);
 
 		_ = fakePromotionServiceClient.ListPromotionsByPromotionTypeAsync(Arg.Any<string>())
 			.Returns(new[]{
@@ -97,7 +99,7 @@ public class BrandPromotionManagerTests
 		var sut = new BrandPromotionManager(
 			fakePromotionServiceClient,
 			fakePaymentServiceClient,
-			fakeServiceProvider);
+			fakeServiceProvider, NullLogger<BrandPromotionManager>.Instance);
 
 		var brandPayemntId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -161,7 +163,8 @@ public class BrandPromotionManagerTests
 		var sut = new BrandPromotionManager(
 			fakePromotionServiceClient,
 			fakePaymentServiceClient,
-			fakeServiceProvider);
+			fakeServiceProvider,
+			NullLogger<BrandPromotionManager>.Instance);
 
 		var depositForm = new DepositFormInfo
 		{

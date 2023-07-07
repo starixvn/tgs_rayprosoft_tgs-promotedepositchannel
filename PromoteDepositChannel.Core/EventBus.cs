@@ -7,7 +7,6 @@ using System.Threading.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tgs.Promotion.Clients;
-using System.Reactive.Disposables;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 

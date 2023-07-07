@@ -1,4 +1,5 @@
 ﻿using System.Data.HashFunction.MurmurHash;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Tgs.Payment.Clients;
 using Tgs.SerialNumberGenerator;
@@ -7,6 +8,7 @@ namespace Tgs.Promotion.PromoteDepositChannel;
 
 internal class DepositEventHandler
 {
+	private static readonly ActivitySource _ActivitySource = new($"{typeof(DepositEventHandler).Namespace}.{nameof(DepositEventHandler)}");
 	private static readonly IMurmurHash3 _Hasher = MurmurHash3Factory.Instance.Create();
 
 	private readonly Promotion _promotion;
@@ -37,6 +39,8 @@ internal class DepositEventHandler
 
 	public async ValueTask OnDepositedAsync(DepositFormInfo formInfo, CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(DepositEventHandler)}.{nameof(OnDepositedAsync)}");
+
 		if (!_promotion.CheckBrandPaymentInSettings(formInfo.BrandPaymentId))
 			return;
 
@@ -92,6 +96,8 @@ internal class DepositEventHandler
 
 	public async ValueTask InitPromotionUsedAmountAsync(CancellationToken cancellationToken = default)
 	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(DepositEventHandler)}.{nameof(InitPromotionUsedAmountAsync)}");
+
 		var usedAmount = await _statisticsService.GetPromotionUsedAmountAsync(
 			_promotion.PromotionId,
 			cancellationToken).ConfigureAwait(false);
