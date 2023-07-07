@@ -8,7 +8,7 @@ data:
       "PromoteDepositChannel": {
         "PromotionServiceUrl": "http://promotion-api",
         "PaymentServiceUrl": "http://payment-api",
-        "PlayerServicieUrl": "http://player-api",
+        "PlayerServiceUrl": "http://player-api",
         "VipLevelServiceUrl": "http://tgs-viplevel"
       }
     }
