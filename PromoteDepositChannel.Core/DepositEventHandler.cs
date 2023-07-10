@@ -63,6 +63,12 @@ internal class DepositEventHandler
 			conditionHash,
 			cancellationToken).ConfigureAwait(false);
 
+		if (await _tgsRepository.CheckDepositEventHasProcessedAsync(
+			formInfo.PlayerCode,
+			distributePlanId,
+			cancellationToken).ConfigureAwait(false))
+			return;
+
 		var depositEvent = new DepositEvent(
 			await _serialNumberGenerator
 				.GenerateAsync(cancellationToken)
@@ -85,13 +91,13 @@ internal class DepositEventHandler
 			depositEvent,
 			cancellationToken).ConfigureAwait(false);
 
-		//await _promotion.DistributePromotionBonusAsync(
-		//	distributePlanId,
-		//	formInfo.PlayerCode,
-		//	bonus,
-		//	bucketAmount,
-		//	depositEvent.Id,
-		//	cancellationToken).ConfigureAwait(false);
+		await _promotion.DistributePromotionBonusAsync(
+			distributePlanId,
+			formInfo.PlayerCode,
+			bonus,
+			bucketAmount,
+			depositEvent.Id,
+			cancellationToken).ConfigureAwait(false);
 	}
 
 	public async ValueTask InitPromotionUsedAmountAsync(CancellationToken cancellationToken = default)

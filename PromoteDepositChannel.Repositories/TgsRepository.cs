@@ -60,6 +60,12 @@ internal class TgsRepository : ITgsRepository
 			: (0M, null);
 	}
 
+	public async ValueTask<bool> CheckDepositEventHasProcessedAsync(string playerCode, Guid planId, CancellationToken cancellationToken = default)
+		=> await _dbContext.PromotionPromoteDepositChannels
+			.AnyAsync(p => p.PlayerCode == playerCode
+				&& p.DistributePlanId == planId, cancellationToken)
+			.ConfigureAwait(false);
+
 	private class UsedAmountAccmulate
 	{
 		public decimal Amount { get; set; }
