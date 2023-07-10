@@ -94,7 +94,7 @@ public class DepositEventHandlerTests
 			.IncrementPromotionUsedAmountAsync(Arg.Is(promotion.PromotionId), Arg.Is(100M));
 		_ = fakeTgsRepository.Received(1)
 			.SaveDepositEventAsync(Arg.Is<DepositEvent>(data => expectedDepositEvent.Matches(data)));
-		_ = fakePromotionServiceClient.Received(1)
+		_ = fakePromotionServiceClient.Received(0)
 			.DistributePromotionBonusAsync(
 				Arg.Is(planId),
 				Arg.Is(depositForm.PlayerCode),
