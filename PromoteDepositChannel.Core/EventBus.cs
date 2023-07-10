@@ -51,7 +51,10 @@ internal class EventBus : IEventSender
 			.ConfigureAwait(false))
 		{
 			if (reader.TryRead(out var evt))
-				using (var activity = _ActivitySource.StartActivity($"{nameof(EventBus)}.{nameof(HandleEventLoopAsync)}"))
+				using (var activity = _ActivitySource.StartActivity(
+					$"{nameof(EventBus)}.{nameof(HandleEventLoopAsync)}",
+					ActivityKind.Internal,
+					evt.ParentTraceId))
 					try
 					{
 						if (!string.IsNullOrEmpty(evt.ParentTraceId))
@@ -76,10 +79,6 @@ internal class EventBus : IEventSender
 					catch (Exception ex)
 					{
 						_logger.LogError(ex, "Process command occur errors.");
-					}
-					finally
-					{
-						activity?.Stop();
 					}
 		}
 	}
@@ -106,9 +105,10 @@ internal class EventBus : IEventSender
 						{
 							await default(CreateThreadAwaiter);
 
-							using var activity = _ActivitySource.StartActivity($"Handle Promotion UsedAmount");
-							if (!string.IsNullOrEmpty(id.ParentActivityId))
-								activity?.SetParentId(id.ParentActivityId);
+							using var activity = _ActivitySource.StartActivity(
+								$"Handle Promotion UsedAmount",
+								ActivityKind.Internal,
+								id.ParentActivityId);
 
 							await using var scope = _serviceProvider.CreateAsyncScope();
 							var tgsRepository = scope.ServiceProvider.GetRequiredService<ITgsRepository>();
