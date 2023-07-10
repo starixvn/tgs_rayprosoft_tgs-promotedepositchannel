@@ -18,6 +18,7 @@ public class DepositEventHandlerTests
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
 		var fakeStatisticsService = Substitute.For<IStatisticsService>();
+		var fakeEventSender = Substitute.For<IEventSender>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -42,7 +43,8 @@ public class DepositEventHandlerTests
 			fakePlayerService,
 			fakeTgsRepository,
 			fakeSerialNumberGenerator,
-			fakeStatisticsService);
+			fakeStatisticsService,
+			fakeEventSender);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -113,6 +115,7 @@ public class DepositEventHandlerTests
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
 		var fakeStatisticsService = Substitute.For<IStatisticsService>();
+		var fakeEventSender = Substitute.For<IEventSender>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -137,7 +140,8 @@ public class DepositEventHandlerTests
 			fakePlayerService,
 			fakeTgsRepository,
 			fakeSerialNumberGenerator,
-			fakeStatisticsService);
+			fakeStatisticsService,
+			fakeEventSender);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -175,6 +179,7 @@ public class DepositEventHandlerTests
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
 		var fakeStatisticsService = Substitute.For<IStatisticsService>();
+		var fakeEventSender = Substitute.For<IEventSender>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -199,7 +204,8 @@ public class DepositEventHandlerTests
 			fakePlayerService,
 			fakeTgsRepository,
 			fakeSerialNumberGenerator,
-			fakeStatisticsService);
+			fakeStatisticsService,
+			fakeEventSender);
 
 		var depositForm = new DepositFormInfo
 		{
@@ -240,6 +246,7 @@ public class DepositEventHandlerTests
 		var fakeTgsRepository = Substitute.For<ITgsRepository>();
 		var fakeSerialNumberGenerator = Substitute.For<ISerialNumberGenerator>();
 		var fakeStatisticsService = Substitute.For<IStatisticsService>();
+		var fakeEventSender = Substitute.For<IEventSender>();
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
@@ -264,7 +271,8 @@ public class DepositEventHandlerTests
 			fakePlayerService,
 			fakeTgsRepository,
 			fakeSerialNumberGenerator,
-			fakeStatisticsService);
+			fakeStatisticsService,
+			fakeEventSender);
 
 		var depositForm = new DepositFormInfo
 		{

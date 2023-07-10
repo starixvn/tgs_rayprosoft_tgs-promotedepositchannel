@@ -51,4 +51,14 @@ internal class BrandDepositEventHandler
 			await handler.InitPromotionUsedAmountAsync(
 				cancellationToken).ConfigureAwait(false);
 	}
+
+	public async ValueTask TriggerCalcutePromotionsUsedAmountAsync(CancellationToken cancellationToken = default)
+	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(BrandDepositEventHandler)}.{nameof(TriggerCalcutePromotionsUsedAmountAsync)}");
+
+		await foreach (var handler in _eventHandlers.ToAsyncEnumerable()
+			.WithCancellation(cancellationToken)
+			.ConfigureAwait(false))
+			await handler.TriggerCalculatePromotionUsedAmountAsync().ConfigureAwait(false);
+	}
 }

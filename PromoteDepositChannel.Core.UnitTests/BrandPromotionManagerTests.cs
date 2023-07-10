@@ -6,7 +6,6 @@ using Tgs.Payment.Clients;
 using Tgs.Promotion.Clients;
 using Tgs.Promotion.PromoteDepositChannel;
 using Tgs.SerialNumberGenerator;
-using Xunit;
 
 namespace PromoteDepositChannel.Core.UnitTests;
 
@@ -47,6 +46,7 @@ public class BrandPromotionManagerTests
 			.AddSingleton(Substitute.For<IPlayerService>())
 			.AddSingleton(Substitute.For<ITgsRepository>())
 			.AddSingleton(Substitute.For<ISerialNumberGenerator>())
+			.AddSingleton(Substitute.For<IEventSender>())
 			.BuildServiceProvider();
 
 		var sut = new BrandPromotionManager(
@@ -94,6 +94,7 @@ public class BrandPromotionManagerTests
 			.AddSingleton(Substitute.For<ISerialNumberGenerator>())
 			.AddSingleton<ILogger<BrandDepositEventHandler>>(NullLogger<BrandDepositEventHandler>.Instance)
 			.AddSingleton(Substitute.For<IStatisticsService>())
+			.AddSingleton(Substitute.For<IEventSender>())
 			.BuildServiceProvider();
 
 		var sut = new BrandPromotionManager(

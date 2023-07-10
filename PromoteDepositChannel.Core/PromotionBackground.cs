@@ -19,7 +19,8 @@ internal class PromotionBackground : BackgroundService
 		=> Task.WhenAll(
 			_eventBus.HandleEventLoopAsync(stoppingToken),
 			_eventBus.HandleUpdateUsedAmountLoopAsync(stoppingToken),
-			ScheduleRenewPromotionsAsync(stoppingToken));
+			ScheduleRenewPromotionsAsync(stoppingToken),
+			_brandPromotionManager.HandlePreviousPromotionsUsedAmountTriggersAsync(stoppingToken));
 
 	private async Task ScheduleRenewPromotionsAsync(CancellationToken cancellationToken = default)
 	{

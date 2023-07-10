@@ -16,6 +16,7 @@ internal class DepositEventHandler
 	private readonly ITgsRepository _tgsRepository;
 	private readonly ISerialNumberGenerator _serialNumberGenerator;
 	private readonly IStatisticsService _statisticsService;
+	private readonly IEventSender _eventSender;
 
 	public EventRange EventRange => _promotion.EventRange;
 
@@ -27,7 +28,8 @@ internal class DepositEventHandler
 		IPlayerService playerService,
 		ITgsRepository tgsRepository,
 		ISerialNumberGenerator serialNumberGenerator,
-		IStatisticsService statisticsService)
+		IStatisticsService statisticsService,
+		IEventSender eventSender)
 	{
 		BrandId = brandId;
 		_promotion = promotion;
@@ -35,6 +37,7 @@ internal class DepositEventHandler
 		_tgsRepository = tgsRepository ?? throw new ArgumentNullException(nameof(tgsRepository));
 		_serialNumberGenerator = serialNumberGenerator ?? throw new ArgumentNullException(nameof(serialNumberGenerator));
 		_statisticsService = statisticsService ?? throw new ArgumentNullException(nameof(statisticsService));
+		_eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
 	}
 
 	public async ValueTask OnDepositedAsync(DepositFormInfo formInfo, CancellationToken cancellationToken = default)
@@ -120,5 +123,13 @@ internal class DepositEventHandler
 				EventRange.End.AddDays(1D),
 				cancellationToken).ConfigureAwait(false);
 		}
+	}
+
+	public async ValueTask TriggerCalculatePromotionUsedAmountAsync()
+	{
+		using var activity = _ActivitySource.StartActivity($"{nameof(DepositEventHandler)}.{nameof(TriggerCalculatePromotionUsedAmountAsync)}");
+
+		await _eventSender.TriggerUpdateUsedAmountAsync(
+			 _promotion.PromotionId).ConfigureAwait(false);
 	}
 }
