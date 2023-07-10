@@ -101,6 +101,8 @@ internal class DepositEventHandler
 			bucketAmount,
 			depositEvent.Id,
 			cancellationToken).ConfigureAwait(false);
+
+		await TriggerCalculatePromotionUsedAmountAsync().ConfigureAwait(false);
 	}
 
 	public async ValueTask InitPromotionUsedAmountAsync(CancellationToken cancellationToken = default)

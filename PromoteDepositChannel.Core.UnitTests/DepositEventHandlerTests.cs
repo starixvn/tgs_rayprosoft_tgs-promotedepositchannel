@@ -104,6 +104,8 @@ public class DepositEventHandlerTests
 				Arg.Is(11000M),
 				Arg.Is(default(string)),
 				Arg.Is(eventId));
+		_ = fakeEventSender.Received(1)
+			.TriggerUpdateUsedAmountAsync(Arg.Is(promotion.PromotionId));
 	}
 
 	[Fact]
