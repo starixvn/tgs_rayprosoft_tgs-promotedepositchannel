@@ -85,13 +85,13 @@ internal class DepositEventHandler
 			depositEvent,
 			cancellationToken).ConfigureAwait(false);
 
-		await _promotion.DistributePromotionBonusAsync(
-			distributePlanId,
-			formInfo.PlayerCode,
-			bonus,
-			bucketAmount,
-			depositEvent.Id,
-			cancellationToken).ConfigureAwait(false);
+		//await _promotion.DistributePromotionBonusAsync(
+		//	distributePlanId,
+		//	formInfo.PlayerCode,
+		//	bonus,
+		//	bucketAmount,
+		//	depositEvent.Id,
+		//	cancellationToken).ConfigureAwait(false);
 	}
 
 	public async ValueTask InitPromotionUsedAmountAsync(CancellationToken cancellationToken = default)

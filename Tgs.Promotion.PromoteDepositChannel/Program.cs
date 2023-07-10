@@ -33,10 +33,10 @@ builder.Services
 
 			options.Url = config.GetConnectionString("Nats")!;
 		})
-		//.AddHandler(
-		//	ProcessorTypes.DepositFormStatusChangedHandlerType,
-		//	"tgs.payment.deposit.status_ex",
-		//	"tgs.promotion.promote-deposit-channel")
+		.AddHandler(
+			ProcessorTypes.DepositFormStatusChangedHandlerType,
+			"tgs.payment.deposit.status_ex",
+			"tgs.promotion.promote-deposit-channel")
 		.AddProcessor(
 			ProcessorTypes.PromoteDepositChannelSettingProcessorType,
 			"tgs.promotion.promotedepositchannel.setting",
