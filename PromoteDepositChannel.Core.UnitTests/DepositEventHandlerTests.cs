@@ -29,7 +29,7 @@ public class DepositEventHandlerTests
 			new PromoteDepositChannelSettings(
 				new[] { 1 },
 				new[] { channelId },
-				.1M,
+				10M,
 				1000M,
 				10M),
 			new Dictionary<Guid, Guid>

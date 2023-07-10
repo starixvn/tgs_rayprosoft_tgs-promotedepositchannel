@@ -29,7 +29,7 @@ internal class Promotion
 
 	public (decimal Bonus, decimal BucketAmount) ComputeBonus(decimal depositAmount)
 	{
-		var bonus = Math.Floor(depositAmount * Settings.Percentage);
+		var bonus = Math.Floor(depositAmount * Settings.Percentage / 100M);
 		if (bonus > Settings.BonusAmountLimit)
 			bonus = Settings.BonusAmountLimit;
 
