@@ -20,8 +20,7 @@ public class PromotionTests
 				Array.Empty<Guid>(),
 				0M,
 				0M,
-				0M,
-				"SportsBook"),
+				0M),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -55,8 +54,7 @@ public class PromotionTests
 				Array.Empty<Guid>(),
 				0M,
 				0M,
-				0M,
-				"SportsBook"),
+				0M),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -96,8 +94,7 @@ public class PromotionTests
 				Array.Empty<Guid>(),
 				10M,
 				1000M,
-				10M,
-				"SportsBook"),
+				10M),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -122,8 +119,7 @@ public class PromotionTests
 				Array.Empty<Guid>(),
 				10M,
 				50M,
-				10M,
-				"SportsBook"),
+				10M),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
