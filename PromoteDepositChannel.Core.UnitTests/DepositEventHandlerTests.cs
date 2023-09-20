@@ -32,7 +32,7 @@ public class DepositEventHandlerTests
 				10M,
 				1000M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -132,7 +132,7 @@ public class DepositEventHandlerTests
 				.1M,
 				1000M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -197,7 +197,7 @@ public class DepositEventHandlerTests
 				.1M,
 				1000M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -265,7 +265,7 @@ public class DepositEventHandlerTests
 				.1M,
 				1000M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId

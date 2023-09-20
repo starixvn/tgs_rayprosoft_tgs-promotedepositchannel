@@ -21,7 +21,7 @@ public class PromotionTests
 				0M,
 				0M,
 				0M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -56,7 +56,7 @@ public class PromotionTests
 				0M,
 				0M,
 				0M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -97,7 +97,7 @@ public class PromotionTests
 				10M,
 				1000M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -123,7 +123,7 @@ public class PromotionTests
 				10M,
 				50M,
 				10M,
-				"SportsBook"),
+				new[] { "SportsBook" }),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
