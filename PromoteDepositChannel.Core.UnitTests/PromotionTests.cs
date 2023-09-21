@@ -62,14 +62,15 @@ public class PromotionTests
 
 		var distributePlanId = Guid.NewGuid();
 		var playerCode = "test1";
-
+		var bucketTypes = new[] { "SportsBook", "Lottery" };
 		// Act
 		await sut.DistributePromotionBonusAsync(
 			distributePlanId,
 			playerCode,
 			100M,
 			1000M,
-			Guid.NewGuid());
+			Guid.NewGuid(),
+			bucketTypes);
 
 		// Assert
 		_ = fakePromotionServiceClient.Received(1)
@@ -79,8 +80,53 @@ public class PromotionTests
 				Arg.Is(100M),
 				Arg.Is(1000M),
 				Arg.Is(default(string)),
-				Arg.Any<Guid>());
+				Arg.Any<Guid>(),
+				Arg.Is<IEnumerable<string>>(x => bucketTypes.SequenceEqual(x)));
 	}
+
+	[Fact]
+	public async Task 派發無BucketTypes的活動獎勵()
+	{
+		// Arrange
+		var fakePromotionServiceClient = Substitute.For<IPromotionServiceClient>();
+
+		var sut = new Promotion(
+			Guid.NewGuid(),
+			(DateTime.UtcNow, DateTime.UtcNow),
+			new PromoteDepositChannelSettings(
+				Array.Empty<int>(),
+				Array.Empty<Guid>(),
+				0M,
+				0M,
+				0M,
+				new[] { "SportsBook" }),
+			new Dictionary<Guid, Guid>(),
+			fakePromotionServiceClient);
+
+		var distributePlanId = Guid.NewGuid();
+		var playerCode = "test1";
+
+		// Act
+		await sut.DistributePromotionBonusAsync(
+			distributePlanId,
+			playerCode,
+			100M,
+			1000M,
+			Guid.NewGuid(),
+			null);
+
+		// Assert
+		_ = fakePromotionServiceClient.Received(1)
+			.DistributePromotionBonusAsync(
+				Arg.Is(distributePlanId),
+				Arg.Is(playerCode),
+				Arg.Is(100M),
+				Arg.Is(1000M),
+				Arg.Is(default(string)),
+				Arg.Any<Guid>(),
+				Arg.Is((IEnumerable<string>?)null));
+	}
+
 
 	[Fact]
 	public void 計算活動獎勵()

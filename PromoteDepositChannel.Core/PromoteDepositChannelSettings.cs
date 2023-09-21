@@ -5,4 +5,4 @@ public record PromoteDepositChannelSettings(
 	decimal Percentage,
 	decimal BonusAmountLimit,
 	decimal TurnoverMultiple,
-	IEnumerable<string> BucketTypes);
+	IEnumerable<string>? BucketTypes);
