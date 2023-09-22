@@ -100,6 +100,7 @@ internal class DepositEventHandler
 			bonus,
 			bucketAmount,
 			depositEvent.Id,
+			_promotion.Settings.BucketTypes,
 			cancellationToken).ConfigureAwait(false);
 
 		await TriggerCalculatePromotionUsedAmountAsync().ConfigureAwait(false);

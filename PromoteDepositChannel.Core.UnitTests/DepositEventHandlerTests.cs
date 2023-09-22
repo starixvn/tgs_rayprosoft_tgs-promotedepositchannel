@@ -22,6 +22,7 @@ public class DepositEventHandlerTests
 
 		var brandPaymentId = Guid.NewGuid();
 		var channelId = Guid.NewGuid();
+		var bucketTypes = new[] { "SportsBook" };
 
 		var promotion = new Promotion(
 			Guid.NewGuid(),
@@ -32,7 +33,7 @@ public class DepositEventHandlerTests
 				10M,
 				1000M,
 				10M,
-				new[] { "SportsBook" }),
+				bucketTypes),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -104,7 +105,8 @@ public class DepositEventHandlerTests
 				Arg.Is(100M),
 				Arg.Is(11000M),
 				Arg.Is(default(string)),
-				Arg.Is(eventId));
+				Arg.Is(eventId),
+				Arg.Is<IEnumerable<string>?>(x => bucketTypes.SequenceEqual(x)));
 		_ = fakeEventSender.Received(1)
 			.TriggerUpdateUsedAmountAsync(Arg.Is(promotion.PromotionId));
 	}
@@ -171,7 +173,8 @@ public class DepositEventHandlerTests
 				Arg.Is(100M),
 				Arg.Is(11000M),
 				Arg.Is(default(string)),
-				Arg.Any<Guid?>());
+				Arg.Any<Guid?>(),
+				Arg.Any<IEnumerable<string>?>());
 	}
 
 	[Fact]
@@ -239,7 +242,8 @@ public class DepositEventHandlerTests
 				Arg.Is(100M),
 				Arg.Is(11000M),
 				Arg.Is(default(string)),
-				Arg.Any<Guid?>());
+				Arg.Any<Guid?>(),
+				Arg.Any<IEnumerable<string>?>());
 	}
 
 	[Fact]
@@ -322,6 +326,7 @@ public class DepositEventHandlerTests
 				Arg.Any<decimal>(),
 				Arg.Any<decimal>(),
 				Arg.Any<string>(),
-				Arg.Any<Guid>());
+				Arg.Any<Guid>(),
+				Arg.Any<IEnumerable<string>?>());
 	}
 }

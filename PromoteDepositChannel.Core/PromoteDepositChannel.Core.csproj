@@ -20,7 +20,7 @@
     <PackageReference Include="Tgs.Payment.Client" Version="0.4.8" />
     <PackageReference Include="Tgs.PaymentService.Client" Version="0.6.24" />
     <PackageReference Include="Tgs.PlayerService.Client" Version="0.0.33" />
-    <PackageReference Include="Tgs.Promotion.Client" Version="1.0.42" />
+    <PackageReference Include="Tgs.Promotion.Client" Version="1.0.43" />
     <PackageReference Include="Tgs.SerialNumberGenerator" Version="1.0.0" />
     <PackageReference Include="Tgs.VipLevelService.Client" Version="0.0.7" />
   </ItemGroup>

@@ -56,6 +56,7 @@ internal class Promotion
 		decimal bonus,
 		decimal bucketAmount,
 		Guid referenceId,
+		IEnumerable<string>? bucketTypes,
 		CancellationToken cancellationToken = default)
 		=> await _promotionServiceClient.DistributePromotionBonusAsync(
 			planId,
@@ -64,6 +65,7 @@ internal class Promotion
 			bucketAmount,
 			null,
 			referenceId,
+			bucketTypes,
 			cancellationToken).ConfigureAwait(false);
 
 	public bool CheckBrandPaymentInSettings(Guid brandPaymentId)
