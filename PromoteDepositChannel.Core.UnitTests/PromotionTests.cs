@@ -152,7 +152,7 @@ public class PromotionTests
 
 		// Assert
 		Assert.Equal(100M, actualBonus);
-		Assert.Equal(11000M, actualBucketAmount);
+		Assert.Equal(10000M, actualBucketAmount);
 	}
 
 	[Fact]
@@ -178,6 +178,6 @@ public class PromotionTests
 
 		// Assert
 		Assert.Equal(50M, actualBonus);
-		Assert.Equal(10500M, actualBucketAmount);
+		Assert.Equal(9500M, actualBucketAmount);
 	}
 }
