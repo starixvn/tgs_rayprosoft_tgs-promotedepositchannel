@@ -79,7 +79,7 @@ public class DepositEventHandlerTests
 			depositForm.PlayerCode,
 			depositForm.Id,
 			100M,
-			11000M,
+			10000M,
 			1,
 			planId,
 			promotion.PromotionId,
@@ -103,7 +103,7 @@ public class DepositEventHandlerTests
 				Arg.Is(planId),
 				Arg.Is(depositForm.PlayerCode),
 				Arg.Is(100M),
-				Arg.Is(11000M),
+				Arg.Is(10000M),
 				Arg.Is(default(string)),
 				Arg.Is(eventId),
 				Arg.Is<IEnumerable<string>?>(x => bucketTypes.SequenceEqual(x)));

@@ -33,7 +33,7 @@ internal class Promotion
 		if (bonus > Settings.BonusAmountLimit)
 			bonus = Settings.BonusAmountLimit;
 
-		var bucketAmount = (depositAmount + bonus) * Settings.TurnoverMultiple;
+		var bucketAmount = (depositAmount + bonus) * Settings.TurnoverMultiple - depositAmount;
 
 		return (bonus, bucketAmount);
 	}
