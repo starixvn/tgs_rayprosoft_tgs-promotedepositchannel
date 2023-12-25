@@ -3,14 +3,9 @@ using Tgs.Promotion.PromoteDepositChannel.Repositories.Entities;
 
 namespace Tgs.Promotion.PromoteDepositChannel.Repositories;
 
-internal class TgsRepository : ITgsRepository
+internal class TgsRepository(TgsContext dbContext) : ITgsRepository
 {
-	private readonly TgsContext _dbContext;
-
-	public TgsRepository(TgsContext dbContext)
-	{
-		_dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-	}
+	private readonly TgsContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
 
 	public async ValueTask SaveDepositEventAsync(DepositEvent depositEvent, CancellationToken cancellationToken = default)
 	{

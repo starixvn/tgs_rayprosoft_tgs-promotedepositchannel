@@ -64,6 +64,7 @@ builder.Services
 			.UseNpgsql("name=Tgs"),
 		sp => sp.GetRequiredService<RedisConnectionManager>().Database);
 
+var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 builder.Services
 	.AddOpenTelemetry()
 	.ConfigureResource(resourceBuilder => resourceBuilder
@@ -76,7 +77,7 @@ builder.Services
 				|| !httpContext.Request.Path.StartsWithSegments("/swagger")
 				&& !httpContext.Request.Path.StartsWithSegments("/healthz")
 				&& !httpContext.Request.Path.StartsWithSegments("/metrics")
-				&& !new[] { "html", "ico", "png", "jpg" }.Any(
+				&& !excludeExtensions.Any(
 					ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 		.AddHttpClientInstrumentation()
 		.AddProfileViewExporter()

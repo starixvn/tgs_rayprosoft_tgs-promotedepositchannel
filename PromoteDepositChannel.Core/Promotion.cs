@@ -2,30 +2,21 @@
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class Promotion
+internal class Promotion(
+	Guid promotionId,
+	EventRange eventRange,
+	PromoteDepositChannelSettings settings,
+	IReadOnlyDictionary<Guid, Guid> brandPaymentDict,
+	IPromotionServiceClient promotionServiceClient)
 {
-	private readonly IReadOnlyDictionary<Guid, Guid> _brandPaymentDict;
-	private readonly IPromotionServiceClient _promotionServiceClient;
+	private readonly IReadOnlyDictionary<Guid, Guid> _brandPaymentDict = brandPaymentDict ?? throw new ArgumentNullException(nameof(brandPaymentDict));
+	private readonly IPromotionServiceClient _promotionServiceClient = promotionServiceClient ?? throw new ArgumentNullException(nameof(promotionServiceClient));
 
-	public Guid PromotionId { get; }
+	public Guid PromotionId { get; } = promotionId;
 
-	public EventRange EventRange { get; }
+	public EventRange EventRange { get; } = eventRange;
 
-	public PromoteDepositChannelSettings Settings { get; }
-
-	public Promotion(
-		Guid promotionId,
-		EventRange eventRange,
-		PromoteDepositChannelSettings settings,
-		IReadOnlyDictionary<Guid, Guid> brandPaymentDict,
-		IPromotionServiceClient promotionServiceClient)
-	{
-		PromotionId = promotionId;
-		EventRange = eventRange;
-		Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-		_brandPaymentDict = brandPaymentDict ?? throw new ArgumentNullException(nameof(brandPaymentDict));
-		_promotionServiceClient = promotionServiceClient ?? throw new ArgumentNullException(nameof(promotionServiceClient));
-	}
+	public PromoteDepositChannelSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
 
 	public (decimal Bonus, decimal BucketAmount) ComputeBonus(decimal depositAmount)
 	{

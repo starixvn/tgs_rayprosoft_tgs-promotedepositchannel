@@ -72,7 +72,7 @@ public class BrandPromotionManagerTests
 					0M,
 					0M,
 					0M,
-					new []{ "SportsBook" })));
+					["SportsBook"])));
 
 		// Act
 		await sut.RenewAllBrandActivatedPromotionsAsync();
@@ -131,11 +131,11 @@ public class BrandPromotionManagerTests
 			.Returns(new BrandPromotionManager.PromotionRule(
 				new PromoteDepositChannelSettings(
 					Array.Empty<int>(),
-					new[] { channelId },
+					[channelId],
 					0M,
 					0M,
 					0M,
-					new[] { "SportsBook" })));
+					["SportsBook"])));
 
 		_ = fakePaymentServiceClient.GetBrandPaymentsAsync(Arg.Is(depositForm.BrandId))
 			.Returns(new[]

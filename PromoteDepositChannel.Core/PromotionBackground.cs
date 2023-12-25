@@ -1,19 +1,15 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class PromotionBackground : BackgroundService
+internal class PromotionBackground(
+	EventBus eventBus,
+	BrandPromotionManager brandPromotionManager,
+	ILogger<PromotionBackground> logger) : BackgroundService
 {
-	private readonly EventBus _eventBus;
-	private readonly BrandPromotionManager _brandPromotionManager;
-
-	public PromotionBackground(
-		EventBus eventBus,
-		BrandPromotionManager brandPromotionManager)
-	{
-		_eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-		_brandPromotionManager = brandPromotionManager ?? throw new ArgumentNullException(nameof(brandPromotionManager));
-	}
+	private readonly EventBus _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+	private readonly BrandPromotionManager _brandPromotionManager = brandPromotionManager ?? throw new ArgumentNullException(nameof(brandPromotionManager));
 
 	protected override Task ExecuteAsync(CancellationToken stoppingToken)
 		=> Task.WhenAll(
@@ -28,8 +24,15 @@ internal class PromotionBackground : BackgroundService
 
 		do
 		{
-			await _brandPromotionManager.RenewAllBrandActivatedPromotionsAsync(
-				cancellationToken).ConfigureAwait(false);
+			try
+			{
+				await _brandPromotionManager.RenewAllBrandActivatedPromotionsAsync(
+					cancellationToken).ConfigureAwait(false);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "Renew activated promotions occur error.");
+			}
 		} while (await timer.WaitForNextTickAsync(cancellationToken).ConfigureAwait(false));
 	}
 }

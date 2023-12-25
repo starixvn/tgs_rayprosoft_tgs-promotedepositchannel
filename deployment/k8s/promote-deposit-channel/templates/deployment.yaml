@@ -64,23 +64,23 @@ spec:
               subPath: appsettings.json
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: http
             periodSeconds: 5
           startupProbe:
             httpGet:
               path: /healthz
-              port: 80
+              port: http
             periodSeconds: 2
             failureThreshold: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
         - name: monitor
-          image: otel/opentelemetry-collector:0.62.1
+          image: otel/opentelemetry-collector:0.91.0
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - --config=/etc/otel/config.yaml

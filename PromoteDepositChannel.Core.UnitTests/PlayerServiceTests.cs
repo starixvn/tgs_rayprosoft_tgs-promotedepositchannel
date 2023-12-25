@@ -50,6 +50,8 @@ public class PlayerServiceTests
 					0M,
 					0M,
 					0M,
+					0M,
+					0,
 					0M),
 				new VipLevelInfo(
 					level2Id,
@@ -68,6 +70,8 @@ public class PlayerServiceTests
 					0M,
 					0M,
 					0M,
+					0M,
+					0,
 					0M),
 				new VipLevelInfo(
 					Guid.NewGuid(),
@@ -86,7 +90,9 @@ public class PlayerServiceTests
 					0M,
 					0M,
 					0M,
-					0M)
+					0M,
+					0,
+					0m)
 			}.ToAsyncEnumerable());
 
 		// Act
@@ -136,6 +142,8 @@ public class PlayerServiceTests
 					0M,
 					0M,
 					0M,
+					0M,
+					0,
 					0M)
 			}.ToAsyncEnumerable());
 

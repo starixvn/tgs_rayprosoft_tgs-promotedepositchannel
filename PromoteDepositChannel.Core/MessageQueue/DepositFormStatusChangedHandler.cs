@@ -1,26 +1,19 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Logging;
-using Tgs.MessageQueue;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
+using Valhalla.MessageQueue;
 
 namespace Tgs.Promotion.PromoteDepositChannel.MessageQueue;
 
-internal class DepositFormStatusChangedHandler : IMessageHandler
+internal class DepositFormStatusChangedHandler(
+	IPaymentServiceClient paymentServiceClient,
+	IEventSender eventSender,
+	ILogger<DepositFormStatusChangedHandler> logger) : IMessageHandler
 {
-	private readonly IPaymentServiceClient _paymentServiceClient;
-	private readonly IEventSender _eventSender;
-	private readonly ILogger<DepositFormStatusChangedHandler> _logger;
-
-	public DepositFormStatusChangedHandler(
-		IPaymentServiceClient paymentServiceClient,
-		IEventSender eventSender,
-		ILogger<DepositFormStatusChangedHandler> logger)
-	{
-		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
-		_eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
-		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
-	}
+	private readonly IPaymentServiceClient _paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
+	private readonly IEventSender _eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
+	private readonly ILogger<DepositFormStatusChangedHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 	public async ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
 	{

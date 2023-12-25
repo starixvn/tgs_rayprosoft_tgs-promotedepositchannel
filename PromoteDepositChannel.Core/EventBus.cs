@@ -11,12 +11,12 @@ using Tgs.Promotion.Clients;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class EventBus : IEventSender
+internal class EventBus(IServiceProvider serviceProvider, ILogger<EventBus> logger) : IEventSender
 {
 	private static readonly ActivitySource _ActivitySource = new($"{typeof(EventBus).Namespace}.{nameof(EventBus)}");
 
-	private readonly IServiceProvider _serviceProvider;
-	private readonly ILogger<EventBus> _logger;
+	private readonly IServiceProvider _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+	private readonly ILogger<EventBus> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
 	private readonly Channel<FormEvent> _channel = Channel.CreateUnbounded<FormEvent>(new UnboundedChannelOptions
 	{
@@ -24,12 +24,6 @@ internal class EventBus : IEventSender
 	});
 
 	private readonly Subject<(Guid Id, string? ParentActivityId)> _usedAmountSubject = new();
-
-	public EventBus(IServiceProvider serviceProvider, ILogger<EventBus> logger)
-	{
-		_serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
-	}
 
 	public ValueTask PushEventAsync(FormEvent formEvent, CancellationToken cancellationToken = default)
 	{
