@@ -8,7 +8,7 @@
 		<UserSecretsId>1ff44b94-8777-4c29-8aa3-ce0d49a9ec71</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
-		<DockerfileTag Condition="$(DockerfileTag) == ''">pgtgs/promote-deposit-channel</DockerfileTag>
+		<ContainerRepository>pgtgs/promote-deposit-channel</ContainerRepository>
 	</PropertyGroup>
 
 	<ItemGroup>
