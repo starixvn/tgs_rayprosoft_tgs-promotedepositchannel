@@ -2,16 +2,11 @@
 
 namespace Tgs.Promotion.PromoteDepositChannel.Repositories;
 
-internal class RedisStatisticsService : IStatisticsService
+internal class RedisStatisticsService(IDatabase redisDatabase) : IStatisticsService
 {
 	private static readonly RedisKey _KeyPrefix = new("Tgs:Promotion:PromoteDepositChannel");
 
-	private readonly IDatabase _redisDatabase;
-
-	public RedisStatisticsService(IDatabase redisDatabase)
-	{
-		_redisDatabase = redisDatabase ?? throw new ArgumentNullException(nameof(redisDatabase));
-	}
+	private readonly IDatabase _redisDatabase = redisDatabase ?? throw new ArgumentNullException(nameof(redisDatabase));
 
 	public async ValueTask IncrementPromotionUsedAmountAsync(Guid promotionId, decimal amount, CancellationToken cancellationToken = default)
 	{

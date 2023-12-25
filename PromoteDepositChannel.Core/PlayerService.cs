@@ -3,18 +3,12 @@ using Tgs.VipLevelService.Clients;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class PlayerService : IPlayerService
+internal class PlayerService(
+	IPlayerServiceClient playerServiceClient,
+	IVipLevelServiceClient vipLevelServiceClient) : IPlayerService
 {
-	private readonly IPlayerServiceClient _playerServiceClient;
-	private readonly IVipLevelServiceClient _vipLevelServiceClient;
-
-	public PlayerService(
-		IPlayerServiceClient playerServiceClient,
-		IVipLevelServiceClient vipLevelServiceClient)
-	{
-		_playerServiceClient = playerServiceClient ?? throw new ArgumentNullException(nameof(playerServiceClient));
-		_vipLevelServiceClient = vipLevelServiceClient ?? throw new ArgumentNullException(nameof(vipLevelServiceClient));
-	}
+	private readonly IPlayerServiceClient _playerServiceClient = playerServiceClient ?? throw new ArgumentNullException(nameof(playerServiceClient));
+	private readonly IVipLevelServiceClient _vipLevelServiceClient = vipLevelServiceClient ?? throw new ArgumentNullException(nameof(vipLevelServiceClient));
 
 	public async ValueTask<DepositPlayer?> GetDepositPlayerAsync(string playerCode, CancellationToken cancellationToken = default)
 	{

@@ -21,7 +21,7 @@ public class PromotionTests
 				0M,
 				0M,
 				0M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -56,7 +56,7 @@ public class PromotionTests
 				0M,
 				0M,
 				0M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -99,7 +99,7 @@ public class PromotionTests
 				0M,
 				0M,
 				0M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -127,7 +127,6 @@ public class PromotionTests
 				Arg.Is((IEnumerable<string>?)null));
 	}
 
-
 	[Fact]
 	public void 計算活動獎勵()
 	{
@@ -143,7 +142,7 @@ public class PromotionTests
 				10M,
 				1000M,
 				10M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 
@@ -169,7 +168,7 @@ public class PromotionTests
 				10M,
 				50M,
 				10M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>(),
 			fakePromotionServiceClient);
 

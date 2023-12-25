@@ -28,8 +28,8 @@ public class DepositEventHandlerTests
 			Guid.NewGuid(),
 			(DateTime.Now, DateTime.Now),
 			new PromoteDepositChannelSettings(
-				new[] { 1 },
-				new[] { channelId },
+				[1],
+				[channelId],
 				10M,
 				1000M,
 				10M,
@@ -106,7 +106,7 @@ public class DepositEventHandlerTests
 				Arg.Is(10000M),
 				Arg.Is(default(string)),
 				Arg.Is(eventId),
-				Arg.Is<IEnumerable<string>?>(x => bucketTypes.SequenceEqual(x)));
+				Arg.Is<IEnumerable<string>?>(x => bucketTypes.SequenceEqual(x!)));
 		_ = fakeEventSender.Received(1)
 			.TriggerUpdateUsedAmountAsync(Arg.Is(promotion.PromotionId));
 	}
@@ -129,12 +129,12 @@ public class DepositEventHandlerTests
 			Guid.NewGuid(),
 			(DateTime.Now, DateTime.Now),
 			new PromoteDepositChannelSettings(
-				new[] { 1 },
-				new[] { channelId },
+				[1],
+				[channelId],
 				.1M,
 				1000M,
 				10M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -195,12 +195,12 @@ public class DepositEventHandlerTests
 			Guid.NewGuid(),
 			(DateTime.Now, DateTime.Now),
 			new PromoteDepositChannelSettings(
-				new[] { 2 },
-				new[] { channelId },
+				[2],
+				[channelId],
 				.1M,
 				1000M,
 				10M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId
@@ -264,12 +264,12 @@ public class DepositEventHandlerTests
 			Guid.NewGuid(),
 			(DateTime.Now, DateTime.Now),
 			new PromoteDepositChannelSettings(
-				new[] { 1 },
-				new[] { channelId },
+				[1],
+				[channelId],
 				.1M,
 				1000M,
 				10M,
-				new[] { "SportsBook" }),
+				["SportsBook"]),
 			new Dictionary<Guid, Guid>
 			{
 				[brandPaymentId] = channelId

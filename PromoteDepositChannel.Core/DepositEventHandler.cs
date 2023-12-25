@@ -6,39 +6,28 @@ using Tgs.SerialNumberGenerator;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class DepositEventHandler
+internal class DepositEventHandler(
+	Guid brandId,
+	Promotion promotion,
+	IPlayerService playerService,
+	ITgsRepository tgsRepository,
+	ISerialNumberGenerator serialNumberGenerator,
+	IStatisticsService statisticsService,
+	IEventSender eventSender)
 {
 	private static readonly ActivitySource _ActivitySource = new($"{typeof(DepositEventHandler).Namespace}.{nameof(DepositEventHandler)}");
 	private static readonly IMurmurHash3 _Hasher = MurmurHash3Factory.Instance.Create();
 
-	private readonly Promotion _promotion;
-	private readonly IPlayerService _playerService;
-	private readonly ITgsRepository _tgsRepository;
-	private readonly ISerialNumberGenerator _serialNumberGenerator;
-	private readonly IStatisticsService _statisticsService;
-	private readonly IEventSender _eventSender;
+	private readonly Promotion _promotion = promotion;
+	private readonly IPlayerService _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
+	private readonly ITgsRepository _tgsRepository = tgsRepository ?? throw new ArgumentNullException(nameof(tgsRepository));
+	private readonly ISerialNumberGenerator _serialNumberGenerator = serialNumberGenerator ?? throw new ArgumentNullException(nameof(serialNumberGenerator));
+	private readonly IStatisticsService _statisticsService = statisticsService ?? throw new ArgumentNullException(nameof(statisticsService));
+	private readonly IEventSender _eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
 
 	public EventRange EventRange => _promotion.EventRange;
 
-	public Guid BrandId { get; }
-
-	public DepositEventHandler(
-		Guid brandId,
-		Promotion promotion,
-		IPlayerService playerService,
-		ITgsRepository tgsRepository,
-		ISerialNumberGenerator serialNumberGenerator,
-		IStatisticsService statisticsService,
-		IEventSender eventSender)
-	{
-		BrandId = brandId;
-		_promotion = promotion;
-		_playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
-		_tgsRepository = tgsRepository ?? throw new ArgumentNullException(nameof(tgsRepository));
-		_serialNumberGenerator = serialNumberGenerator ?? throw new ArgumentNullException(nameof(serialNumberGenerator));
-		_statisticsService = statisticsService ?? throw new ArgumentNullException(nameof(statisticsService));
-		_eventSender = eventSender ?? throw new ArgumentNullException(nameof(eventSender));
-	}
+	public Guid BrandId { get; } = brandId;
 
 	public async ValueTask OnDepositedAsync(DepositFormInfo formInfo, CancellationToken cancellationToken = default)
 	{

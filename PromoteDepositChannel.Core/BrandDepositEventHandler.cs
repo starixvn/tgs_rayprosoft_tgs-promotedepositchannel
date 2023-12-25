@@ -4,24 +4,17 @@ using Tgs.Payment.Clients;
 
 namespace Tgs.Promotion.PromoteDepositChannel;
 
-internal class BrandDepositEventHandler
+internal class BrandDepositEventHandler(
+	Guid brandId,
+	IEnumerable<DepositEventHandler> eventHandlers,
+	ILogger<BrandDepositEventHandler> logger)
 {
 	private static readonly ActivitySource _ActivitySource = new($"{typeof(BrandDepositEventHandler).Namespace}.{nameof(BrandDepositEventHandler)}");
 
-	private readonly IEnumerable<DepositEventHandler> _eventHandlers;
-	private readonly ILogger<BrandDepositEventHandler> _logger;
+	private readonly IEnumerable<DepositEventHandler> _eventHandlers = eventHandlers ?? throw new ArgumentNullException(nameof(eventHandlers));
+	private readonly ILogger<BrandDepositEventHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-	public Guid BrandId { get; }
-
-	public BrandDepositEventHandler(
-		Guid brandId,
-		IEnumerable<DepositEventHandler> eventHandlers,
-		ILogger<BrandDepositEventHandler> logger)
-	{
-		BrandId = brandId;
-		_eventHandlers = eventHandlers ?? throw new ArgumentNullException(nameof(eventHandlers));
-		_logger = logger ?? throw new ArgumentNullException(nameof(logger));
-	}
+	public Guid BrandId { get; } = brandId;
 
 	public async ValueTask OnDepositedAsync(
 		DepositFormInfo depositForm,
